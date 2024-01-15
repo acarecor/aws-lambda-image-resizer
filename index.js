@@ -9,7 +9,7 @@ const s3Client = new S3Client({
 
 
 export const handler = async (event) => {
-    
+    // Extract information from the S3 event record
     const record = event.Records[0];
     const srcBucket = record.s3.bucket.name;
     
@@ -17,9 +17,10 @@ export const handler = async (event) => {
     const srcPath = decodeURIComponent(
       Object.key.replace(/\+/g, " ")
     );
+     // Retrieve the output bucket name from environment variables
     const output_bucket_name = process.env.OUTPUT_BUCKET_NAME;
 
-    //Dowload image
+    // Download the original image from the source bucket
     const getObjectParams = {
         Bucket: srcBucket,
         Key: srcPath
@@ -27,10 +28,10 @@ export const handler = async (event) => {
     const getObjectCommand = new GetObjectCommand(getObjectParams);
     const originalImage = await s3Client.send(getObjectCommand);
     
-    //Resize
+    //Resize the image
     const resizedBuffer = await sharp(originalImage.Body).resize(200).toBuffer();
     
-    //Upload to new bucket
+    //Upload the resized image to the new bucket
     const newBucketParams = {
         Bucket : output_bucket_name,
         Key:srcPath,
@@ -39,7 +40,7 @@ export const handler = async (event) => {
         ACL: 'public-read'
     };
 
-    // Función para determinar el tipo de contenido basado en la extensión del archivo
+    // Function to determine the content type based on the file extension
     const getContentType = (filePath)=> {
     const lowerCaseFilePath = filePath.toLowerCase();
      if (lowerCaseFilePath.endsWith('.jpeg') || lowerCaseFilePath.endsWith('.jpg')) {
@@ -47,14 +48,14 @@ export const handler = async (event) => {
      } else if (lowerCaseFilePath.endsWith('.png')) {
         return 'image/png';
      } else {
-        // Establecer un valor predeterminado si no es JPEG ni PNG
+        // Set a default value if it's not JPEG nor PNG
         return 'application/octet-stream';
      }
     }
-    
+    // Create and send the PutObjectCommand to upload the resized image
     const putObjectCmd = new PutObjectCommand(newBucketParams);
     await s3Client.send(putObjectCmd);
     
-
+    // Return a success message along with the event
     return { message: 'success', event };
 };
