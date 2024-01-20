@@ -6,14 +6,7 @@ const s3Client = new S3Client({
     region: "eu-central-1" ,
 });
 
-const S3 = new S3Client();
 const OUTPUT_BUCKET = process.env.OUTPUT_BUCKET;
-const THUMBNAIL_WIDTH = 200; // px
-const SUPPORTED_FORMATS = {
-  jpg: true,
-  jpeg: true,
-  png: true,
-};
 
 export const handler = async (event) => {
     // Extract information from the S3 event record
