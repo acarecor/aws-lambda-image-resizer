@@ -1,6 +1,6 @@
 # AWS Lambda Image Resizer
 
-This AWS Lambda function is designed to automatically resize images stored in an S3 bucket. By triggering on S3 events, the Lambda function processes incoming images, resizes them to a specified format, and then saves the resized images back to the bucket. The configuration is easily adjustable, allowing you to customize the resizing parameters as needed. Simplify your image processing workflow with this efficient AWS Lambda Image Resizer.
+This AWS Lambda function is designed to automatically resize images stored in an S3 bucket. By triggering on S3 events, the Lambda function processes incoming images, resizes them to a specified format, and then saves the resized images in another bucket. The configuration is easily adjustable, allowing you to customize the resizing parameters as needed. Simplify your image processing workflow with this efficient AWS Lambda Image Resizer.
 
 ## Features
 * Automatic Resizing: Triggered by S3 events, the Lambda function seamlessly resizes images upon upload.

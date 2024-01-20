@@ -1,4 +1,3 @@
-require('dotenv').config();
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 
@@ -7,6 +6,14 @@ const s3Client = new S3Client({
     region: "eu-central-1" ,
 });
 
+const S3 = new S3Client();
+const OUTPUT_BUCKET = process.env.OUTPUT_BUCKET;
+const THUMBNAIL_WIDTH = 200; // px
+const SUPPORTED_FORMATS = {
+  jpg: true,
+  jpeg: true,
+  png: true,
+};
 
 export const handler = async (event) => {
     // Extract information from the S3 event record
@@ -18,7 +25,7 @@ export const handler = async (event) => {
       Object.key.replace(/\+/g, " ")
     );
      // Retrieve the output bucket name from environment variables
-    const output_bucket_name = process.env.OUTPUT_BUCKET_NAME;
+    const output_bucket_name = process.env.OUTPUT_BUCKET;
 
     // Download the original image from the source bucket
     const getObjectParams = {
@@ -33,7 +40,7 @@ export const handler = async (event) => {
     
     //Upload the resized image to the new bucket
     const newBucketParams = {
-        Bucket : output_bucket_name,
+        Bucket : OUTPUT_BUCKET,
         Key:srcPath,
         Body:resizedBuffer,
         ContentType: getContentType(srcPath) ,

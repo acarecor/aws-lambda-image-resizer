@@ -2,16 +2,13 @@
   "name": "aws-lambda-image-resizer",
   "version": "1.0.0",
   "description": "Lambda function using sharp",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "index.mjs",
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.485.0",
-    "dotenv": "^16.3.1",
-    "sharp": "^0.33.1"
+    "sharp": "^0.33.2"
   }
 }
